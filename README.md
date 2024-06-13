@@ -46,5 +46,19 @@ An other way to do it is through terminal. you can open terminal from launch pad
 
 <img width="1512" alt="Screenshot 2024-06-13 at 7 15 23 PM" src="https://github.com/fazalahmed3012/shoesly/assets/12868468/fcb770d8-3457-47c1-8bb6-f81cf07d6825">
 
+### 5 - Running the project
 
+To run this project you would be required to either run iOS/Android simulator or you can connect a physical iOS or an android phone to your computer. 
+For android phone, the phone must have developer mode turned on and debugging turned on.
 
+You can just click the devices menu on top to see all the available device and virtual device options as well.
+
+<img width="450" alt="Screenshot 2024-06-13 at 8 22 42 PM" src="https://github.com/fazalahmed3012/shoesly/assets/12868468/95403bff-c781-47df-8cf1-49d4bcc19c48">
+
+I will be opening iOS simulator to run the project but you can run it on the physical device or create a virtual device, by going to device manager from the top right menu and clicking on the + button to add new device. Once you have selected and created the device it should be visible in the list and play button can be used to run this device as shown below
+
+<img width="387" alt="Screenshot 2024-06-13 at 8 25 41 PM" src="https://github.com/fazalahmed3012/shoesly/assets/12868468/aa81657d-310f-4885-bf24-409fc09e961e">
+
+Once your device is detected by android studio either a physical one or a virtual one press the green play in the top bar and your project will be built and run on that device. And the project will start on the device.
+
+<img width="1512" alt="Screenshot 2024-06-13 at 8 36 06 PM" src="https://github.com/fazalahmed3012/shoesly/assets/12868468/4c7ecbb9-fdd5-4338-8b17-9b26f0269b19">
