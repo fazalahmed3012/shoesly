@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -187,9 +188,24 @@ class Checkout extends StatelessWidget {
                 InkWell(
                     child: PrimaryButton(
                       text: "PAYMENT",
-                      onTap: (){
+                      onTap: () async {
                         context.read<CartController>().placeOrder();
-
+                        await FirebaseAnalytics.instance
+                            .logBeginCheckout(
+                            value: context.read<CartController>().totalAmount + 20.0,
+                            currency: 'USD',
+                            items: [
+                              ...List.generate(
+                                  context.read<CartController>().products.length,
+                                  (index) => AnalyticsEventItem(
+                                      itemName: context.read<CartController>().products[index].name,
+                                      itemBrand: context.read<CartController>().products[index].brand.name,
+                                      price: context.read<CartController>().products[index].price,
+                                      quantity: context.read<CartController>().productQuantity[index]
+                                  )
+                              ),
+                            ],
+                        );
                         showModalBottomSheet(
                           isDismissible: false,
                             backgroundColor: primaryNeutral0,

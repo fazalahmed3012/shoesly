@@ -119,6 +119,9 @@ class _FiltersState extends State<Filters> {
                           thumbColor: primaryNeutral0,
                         ),
                         child: SfRangeSlider(
+                          labelFormatterCallback: (dynamic actualValue, String formattedText) {
+                            return '\$$formattedText';
+                          },
                           thumbShape: _CustomThumb(textScaleFactor: MediaQuery.of(context).textScaleFactor, values: SfRangeValues(minPrice,maxPrice)),
                           min: 0,
                           max: 500,

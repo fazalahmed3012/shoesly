@@ -1,8 +1,6 @@
 
-import 'dart:convert';
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shoesly/Models/Brand.dart';
@@ -17,6 +15,7 @@ class DiscoverPageController extends ChangeNotifier{
   List<Brand> brands = [];
   List<int> brandsCount = [];
   bool isLoading = false;
+  bool isUpdating = false;
   bool isError = false;
   bool brandLoading = false;
   bool filterApplied = false;
@@ -28,6 +27,7 @@ class DiscoverPageController extends ChangeNotifier{
   List<String> appliedFilters = [];
   List<ProductColor> selectedColor = [];
   List<String> selectedColorName = [];
+  late QueryDocumentSnapshot lastVisible;
 
   clearFilters(){
     selectedBrand = Brand("All", "image");
@@ -92,8 +92,9 @@ class DiscoverPageController extends ChangeNotifier{
                   (index)=>selectedGender[index])]);
     }
 
-    data.get()
+    data.limit(5).get()
         .then((QuerySnapshot querySnapshot){
+          lastVisible = querySnapshot.docs[querySnapshot.size - 1];
           if(querySnapshot.docs.isNotEmpty) {
             querySnapshot.docs.forEach((value) {
               if(value['price']>=minPrice && value['price']<=maxPrice) {
@@ -147,6 +148,97 @@ class DiscoverPageController extends ChangeNotifier{
           }
     }).onError((error, trace){
       isLoading = false;
+      isError = true;
+      notifyListeners();
+      log("Error caught : $error");
+    });
+  }
+
+  updateProducts(){
+    isUpdating = true;
+    isError = false;
+    notifyListeners();
+
+    CollectionReference fireProducts = FirebaseFirestore.instance.collection('products');
+
+    var data = fireProducts.orderBy(
+        sortBy.isEmpty
+            ? "name"
+            : sortBy.contains("Lowest")
+            ? "price"
+            : sortBy.contains("Reviews")
+            ? "reviews"
+            : sortBy.contains("Most") ?
+        "createOn"
+            : sortBy.contains("Gender")
+            ? "gender"
+            : "colors",
+        descending: sortBy.contains("Most")
+            ? true : false);
+
+    if(selectedGender.isNotEmpty){
+      data = data.where(
+          "gender",
+          whereIn: [...List.generate(selectedGender.length,
+                  (index)=>selectedGender[index])]);
+    }
+
+    data.startAfterDocument(lastVisible).limit(5).get()
+        .then((QuerySnapshot querySnapshot){
+      if(querySnapshot.docs.isNotEmpty) {
+        lastVisible = querySnapshot.docs[querySnapshot.size - 1];
+        querySnapshot.docs.forEach((value) {
+          if(value['price']>=minPrice && value['price']<=maxPrice) {
+            if(selectedColor.isEmpty || List<ProductColor>.from(
+                value['colors'].map((colorVal) =>
+                    ProductColor(
+                        name: colorVal['name'],
+                        color: colorVal['color']))).any((item){return selectedColor.any((color){return color.name.contains(item.name);});})) {
+              products.add(Product(
+                  name: value['name'],
+                  images: value['image'],
+                  price: double.parse(value['price'].toString()),
+                  reviews: List<Review>.from(value['reviews'].map((reviewVal) =>
+                      Review(
+                          createdOn: reviewVal['createdOn'],
+                          rating: double.parse(reviewVal['rating'].toString()),
+                          review: reviewVal['review'],
+                          userImage: reviewVal['userImage'],
+                          userName: reviewVal['userName']))),
+                  brand: Brand(value['brand']['name'], value['brand']['image']),
+                  description: value['description'],
+                  sizes: value['sizes'],
+                  gender: value['gender'],
+                  colors: List<ProductColor>.from(
+                      value['colors'].map((colorVal) =>
+                          ProductColor(
+                              name: colorVal['name'],
+                              color: colorVal['color'])))
+              ));
+            }
+          }
+          List<ProductColor> temp = List<ProductColor>.from(
+              value['colors'].map((colorVal) =>
+                  ProductColor(
+                      name: colorVal['name'],
+                      color: colorVal['color'])));
+          for (int i = 0; i < temp.length; i++) {
+            if (!filterColors.contains(temp[i]) &&
+                !filterColorNames.contains(temp[i].name)) {
+              filterColors.add(temp[i]);
+              filterColorNames.add(temp[i].name);
+            }
+          }
+          isUpdating = false;
+          notifyListeners();
+        });
+      }
+      else{
+        isUpdating = false;
+        notifyListeners();
+      }
+    }).onError((error, trace){
+      isUpdating = false;
       isError = true;
       notifyListeners();
       log("Error caught : $error");

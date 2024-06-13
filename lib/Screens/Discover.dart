@@ -32,6 +32,19 @@ class _DiscoverPageState extends State<DiscoverPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       getData();
     });
+    scrollController.addListener (() {
+      double maxscroll = scrollController.position.maxScrollExtent;
+      double currentScroll = scrollController.position.pixels;
+      double delta = MediaQuery
+          .of(context)
+          .size
+          .width * 0.20;
+      if (maxscroll - currentScroll <= delta) {
+        if(!context.read<DiscoverPageController>().isUpdating) {
+          context.read<DiscoverPageController>().updateProducts();
+        }
+      }
+    }) ;
     // TODO: implement initState
     super.initState();
   }
@@ -55,6 +68,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   FirebaseApp secondaryApp = Firebase.app();
+  final ScrollController scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -155,6 +169,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
                             ? Expanded(
                           // height: 1.h,
                           child: GridView(
+                            controller: scrollController,
                             padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 30.h),
                               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisSpacing: 15.w,
@@ -190,7 +205,8 @@ class _DiscoverPageState extends State<DiscoverPage> {
                                   ? "Something went wrong\ntry again later"
                                   : "No product found",
                                 style: headline500(primaryNeutral500), textAlign: TextAlign.center,),)),
-
+                        if(productsValue.isUpdating)
+                          Center(child: CircularProgressIndicator(color: primaryNeutral500,),)
                       ],
                     ),
               ),
