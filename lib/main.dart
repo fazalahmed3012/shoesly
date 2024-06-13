@@ -2,6 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:shoesly/Controllers/CartController.dart';
+import 'package:shoesly/Controllers/DetailPageController.dart';
 import 'package:shoesly/Controllers/DiscoverPageController.dart';
 import 'package:shoesly/Screens/Discover.dart';
 
@@ -22,6 +24,8 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (c) => DiscoverPageController()),
+        ChangeNotifierProvider(create: (c) => DetailPageController()),
+        ChangeNotifierProvider(create: (c) => CartController()),
       ],
       child: ScreenUtilInit(
         designSize: const Size(375, 812),

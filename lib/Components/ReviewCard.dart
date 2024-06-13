@@ -1,10 +1,16 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'package:shoesly/AppConstants.dart';
+import 'package:shoesly/Controllers/DetailPageController.dart';
+import 'package:shoesly/Models/Review.dart';
 
 class ReviewCard extends StatelessWidget {
-  const ReviewCard({super.key});
+  ReviewCard({super.key, required this.review});
+
+  Review review;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +27,24 @@ class ReviewCard extends StatelessWidget {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
             ),
-            child: Image.asset("assets/profile.png", fit: BoxFit.cover,),
+            child: CachedNetworkImage(
+              imageUrl: review.userImage,
+              width: 120.w,
+              height: 85.h,
+              fit: BoxFit.cover,
+              placeholder: (context, str) {
+                return Image.asset(
+                  'assets/profilePlaceholder.png',
+                  fit: BoxFit.contain,
+                );
+              },
+              errorWidget: (context, str, obj) {
+                return Image.asset(
+                  'assets/profilePlaceholder.png',
+                  fit: BoxFit.contain,
+                );
+              },
+            )
           ),
 
           Padding(
@@ -34,24 +57,24 @@ class ReviewCard extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("Maria Saris",style: headline300(primaryNeutral500),),
-                      Text("Today")
+                      Text(review.userName,style: headline300(primaryNeutral500),),
+                      Text(context.read<DetailPageController>().getTimeDifference(DateTime.parse(review.createdOn)))
                     ],
                   ),
 
                   Padding(
                     padding: EdgeInsets.only(top: 5.h, bottom: 10.h),
                     child: RatingBarIndicator(
-                      rating: 5,
+                      rating: review.rating,
                       itemSize: 12.sp,
-                      itemBuilder: (context, index) => Icon(
+                      itemBuilder: (context, index) => const Icon(
                         Icons.star_rounded,
                         color: Colors.amber,
                       ),
                     ),
                   ),
                   
-                  Text("Perfect for keeping your feet dry and warm in damp conditions.",
+                  Text(review.review,
                   style: bodyText100(primaryNeutral500),)
                 ],
               ),
