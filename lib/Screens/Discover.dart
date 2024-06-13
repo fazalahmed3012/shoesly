@@ -183,7 +183,13 @@ class _DiscoverPageState extends State<DiscoverPage> {
                             )).toList(),
                           ),
                         )
-                            : Expanded(child: Center(child: Text("No product found", style: headline500(primaryNeutral500),),)),
+                            : Expanded(
+                            child: Center(
+                              child: Text(productsValue.products.isEmpty
+                                  && productsValue.brands.isEmpty
+                                  ? "Something went wrong\ntry again later"
+                                  : "No product found",
+                                style: headline500(primaryNeutral500), textAlign: TextAlign.center,),)),
 
                       ],
                     ),
@@ -191,7 +197,9 @@ class _DiscoverPageState extends State<DiscoverPage> {
 
               floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
 
-              floatingActionButton: IconLeftButton(
+              floatingActionButton: productsValue.brands.isNotEmpty
+                || productsValue.products.isNotEmpty
+                ? IconLeftButton(
                 onTap: () {
                   showModalBottomSheet(
                     barrierColor: primaryNeutral0,
@@ -222,7 +230,8 @@ class _DiscoverPageState extends State<DiscoverPage> {
                     )
                   ],
                 ),
-              ),
+              )
+                : Container(),
             );
           }
         ),

@@ -159,10 +159,15 @@ class DiscoverPageController extends ChangeNotifier{
 
     CollectionReference fireProducts = FirebaseFirestore.instance.collection('brands');
     fireProducts.get().then((QuerySnapshot querySnapshot){
-      brands = [Brand("All", "image")];
-      querySnapshot.docs.forEach((value) {
-        brands.add(Brand(value['name'], value['image']));
-      });
+      if(querySnapshot.docs.isNotEmpty) {
+        brands = [Brand("All", "image")];
+        querySnapshot.docs.forEach((value) {
+          brands.add(Brand(value['name'], value['image']));
+        });
+      }else{
+        brandLoading = false;
+        notifyListeners();
+      }
     });
     brandLoading = false;
     notifyListeners();
