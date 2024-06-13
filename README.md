@@ -59,6 +59,14 @@ I will be opening iOS simulator to run the project but you can run it on the phy
 
 <img width="387" alt="Screenshot 2024-06-13 at 8 25 41 PM" src="https://github.com/fazalahmed3012/shoesly/assets/12868468/aa81657d-310f-4885-bf24-409fc09e961e">
 
-Once your device is detected by android studio either a physical one or a virtual one press the green play in the top bar and your project will be built and run on that device. And the project will start on the device.
+Once your device is detected by android studio either a physical one or a virtual one press the green play in the top bar and your project will be built and run on that device.
 
 <img width="1512" alt="Screenshot 2024-06-13 at 8 36 06 PM" src="https://github.com/fazalahmed3012/shoesly/assets/12868468/4c7ecbb9-fdd5-4338-8b17-9b26f0269b19">
+
+## Development Challenges
+
+I was not familiar with data storage on firbase or using firebase firestore. At first I uploaded all the required files such as brand and product images to firebase storage. Then I add the required firebase packages to the project and configure it using flutter fire. I instead of using firestore, used real-time database and had problem with sorting and filtering data. I tried to get the required results but failed to do so. After a few trys i did some research and got to know about firestore configuration and how you can sort and filter data. I rewrote the code for database integration and final was successful with firestore integration and data flow was smooth. Now i am able to not just get and insert data into the database, but also can sort data by using orderBy() function and filter through that data using where() function.
+
+The next challenge I faced was while building UI, specificly filter UI. The price slider used in the design was a custom one, I searched for such slider widgets and if any package would be available to implement the required design but failed many times. Eventually I stumbled upon a custom slider package "syncfusion_flutter_sliders", it was a big help. This package helped me design price slider that was quite close to the design provided. I was so close yet so far, everything was perfect except the slider thumb. So I decided to create a custom thumb, I searched only for ways to create custom thumbs and using those pointers I ended up making my own custom thumb that was pixel prefect.
+
+
