@@ -1,16 +1,27 @@
 # shoesly
 
-Brand Marketplace App
+Shoes Marketplace App
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+### 1 - Install Andoird Studio
 
-A few resources to get you started if this is your first Flutter project:
+This link can be used to download and install android studio, if not already installed. If you already have android studio install on you PC skip this step.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+https://developer.android.com/studio
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### 2 - Environment Setup
+
+If you already have flutter and dart SDK setup, you can skip this step.
+Use the following link to download and setup flutter and dart SDK in your android studio.
+This will allow you to create and run flutter applications.
+
+https://docs.flutter.dev/get-started/install
+
+### 3 - Create project from Git
+
+To create project from Git navigate to File -> New -> Project from Version Controll Source(VCS).
+
+<img width="585" alt="Screenshot 2024-06-13 at 6 41 05 PM" src="https://github.com/fazalahmed3012/shoesly/assets/12868468/9992dd50-8d00-4b13-92f1-bb6eddc0c1ae">
+
+Next copy the git clone URL from github source code.
